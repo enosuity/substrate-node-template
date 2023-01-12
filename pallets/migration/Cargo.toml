@@ -1,0 +1,47 @@
+[package]
+authors = ["Centrifuge <admin@centrifuge.io>"]
+description = 'Migration pallet for the runtime'
+edition = '2021'
+license = "LGPL-3.0"
+name = 'pallet-migration-manager'
+repository = "https://github.com/centrifuge/centrifuge-chain"
+version = '0.1.0'
+
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
+[dependencies]
+codec = { package = 'parity-scale-codec', version = '3.0.0', features = ['derive'], default-features = false }
+log = { version = "0.4.17", default-features = false }
+scale-info = { version = "2.2.0", default-features = false, features = ["derive"] }
+
+frame-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true, branch = "polkadot-v0.9.32" }
+frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+
+# pallet-balances = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+pallet-balances = { version = "4.0.0-dev", default-features = false, path = "../balances" }
+pallet-proxy = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+pallet-vesting = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+sp-version = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+
+[dev-dependencies]
+hex = "0.4.3"
+rand = "0.8.5"
+
+[features]
+default = ['std']
+runtime-benchmarks = ["frame-benchmarking"]
+std = [
+  'codec/std',
+  'frame-support/std',
+  'frame-system/std',
+  'pallet-vesting/std',
+  'pallet-balances/std',
+  'pallet-proxy/std',
+]
+try-runtime = ["frame-support/try-runtime"]
