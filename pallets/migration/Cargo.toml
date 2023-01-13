@@ -23,6 +23,16 @@ frame-system = { git = "https://github.com/paritytech/substrate", default-featur
 pallet-balances = { version = "4.0.0-dev", default-features = false, path = "../balances" }
 pallet-proxy = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
 pallet-vesting = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
+
+pallet-contracts = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+pallet-contracts-primitives = { version = "6.0.0", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+pallet-randomness-collective-flip = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+
+pallet-aura = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+pallet-timestamp = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+pallet-transaction-payment = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+sp-consensus-aura = { version = "0.10.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+
 sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
 sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
 sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.32" }
@@ -38,10 +48,18 @@ default = ['std']
 runtime-benchmarks = ["frame-benchmarking"]
 std = [
   'codec/std',
+  'pallet-aura/std',
+  'pallet-timestamp/std',
+  'pallet-transaction-payment/std',
   'frame-support/std',
   'frame-system/std',
   'pallet-vesting/std',
   'pallet-balances/std',
   'pallet-proxy/std',
+  
+  "pallet-contracts/std",
+	"pallet-contracts-primitives/std",
+	"pallet-randomness-collective-flip/std",
+  'sp-consensus-aura/std',
 ]
 try-runtime = ["frame-support/try-runtime"]

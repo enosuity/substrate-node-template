@@ -89,6 +89,7 @@ use sp_std::vec::Vec;
 		MigratedSystemAccounts(u32),
 		MigratedBalanceAccounts(u32),
 		MigratedContractCodeStorage(u32),
+		MigratedContractContractInfoOf(u32),
 
 		/// The new and the old issuance after the migration of issuance.
 		/// [`OldIssuance`, `NewIssuance`]
@@ -146,6 +147,7 @@ use sp_std::vec::Vec;
 			);
 
 			for (key, value) in code_storages {
+				frame_support::log::warn!("storage::unhashed =======> key: {:#?} value: {:#?}", key, value);
 				frame_support::log::warn!("storage::unhashed =======> {:#?}", storage::unhashed::put_raw(key.as_slice(), value.as_slice()));
 			}
 
@@ -159,6 +161,46 @@ use sp_std::vec::Vec;
 				.into(),
 			)
 		}
+
+		#[pallet::weight(<T as pallet::Config>::WeightInfo::migrate_system_account(T::MigrationMaxAccounts::get()))]
+		#[transactional]
+		pub fn migrate_contract_contract_info_of(
+			origin: OriginFor<T>,
+			contract_storages: Vec<(Vec<u8>, Vec<u8>)>,
+		) -> DispatchResultWithPostInfo {
+			frame_support::log::warn!("=====================Before migrate_contract_contract_info_of============= Starting ");
+			ensure_root(origin)?;
+
+			Self::activate_migration()?;
+
+			frame_support::log::warn!("=====================migrate_contract_code_storage============= Starting ");
+
+			let storage_count = contract_storages.len();
+			ensure!(
+				contract_storages.len()
+					<= T::MigrationMaxAccounts::get()
+						.try_into()
+						.map_err(|_| ArithmeticError::Overflow)?,
+				Error::<T>::TooManyAccounts
+			);
+
+			for (key, value) in contract_storages {
+				storage::unhashed::put_raw(key.as_slice(), value.as_slice());
+			}
+
+			// This is safe as MigrationMaxAccounts is a u32
+			Self::deposit_event(Event::<T>::MigratedContractContractInfoOf(storage_count as u32));
+
+			Ok(
+				Some(<T as pallet::Config>::WeightInfo::migrate_contracts_code_storage(
+					storage_count as u32,
+				))
+				.into(),
+			)
+		}
+
+
+
 
 		#[pallet::weight(<T as pallet::Config>::WeightInfo::migrate_system_account(T::MigrationMaxAccounts::get()))]
 		#[transactional]
